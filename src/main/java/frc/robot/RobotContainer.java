@@ -82,6 +82,7 @@ public class RobotContainer {
    // m_ElevatorArmSubsystem2.setDefaultCommand(new ElevatorArmCommand2(m_ElevatorArmSubsystem2,0));
     m_ElevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_ElevatorSubsystem,0));
     m_ElevatorWheelsSubsystem.setDefaultCommand(new ElevatorWheelsCommand(m_ElevatorWheelsSubsystem,0));
+    m_ElevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_ElevatorArmSubsystem,0));
 //Lifter Defaults
     m_LifterSubsystem.setDefaultCommand(new LifterCommand(m_LifterSubsystem, 0));
     Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
@@ -92,9 +93,6 @@ public class RobotContainer {
   drivebase.setDefaultCommand(driveFieldOrientedDirectAngleSim);
   }
 
-
-
-
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
   ()-> m_XboxController.getLeftY() * -1,
   ()-> m_XboxController.getLeftX() * -1)
@@ -103,14 +101,10 @@ public class RobotContainer {
     .scaleTranslation(0.8)
     .allianceRelativeControl(true);
 
-
-
   SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(()-> m_XboxController.getRightX() * -1,
   ()-> m_XboxController.getRightY() * -1) 
     .headingWhile(true);
-  
   Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
-
   Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
 
   private void configureBindings() {
@@ -125,7 +119,8 @@ public class RobotContainer {
     m_driverController.button(2).whileTrue(new ShooterIntakeCommand(m_ShooterIntakeSubsystem, -0.6));
     m_driverController.button(3).whileTrue(new ShooterCommand(m_ShooterSubsystem, 0.3));
     m_driverController.button(4).whileTrue(new ShooterCommand(m_ShooterSubsystem, -0.8));
-    m_driverController.button(5).whileTrue(new ElevatorCommand(m_ElevatorSubsystem, 0));
+    m_driverController.button(5).whileTrue(new ElevatorCommand(m_ElevatorSubsystem, 0.1));//moves elevator up
+    m_driverController.button(9).whileTrue(new ElevatorCommand(m_ElevatorSubsystem, -0.1));//moves elevator down
     m_driverController.button(6).whileTrue(new ElevatorArmCommand(m_ElevatorArmSubsystem, 0));
     m_driverController.button(7).whileTrue(new ElevatorWheelsCommand(m_ElevatorWheelsSubsystem, 0));
   // Call Sam to make button for Auto Limelight Targeting. Has to be on Driver Controller

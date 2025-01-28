@@ -14,7 +14,6 @@ public class ElevatorArmSubsystem extends SubsystemBase{
     private SparkMaxConfig config = new SparkMaxConfig();
     private RelativeEncoder m_Rotation = motor1.getEncoder();
 
-
 public void run(double speed){
     motor1.set(speed);
     

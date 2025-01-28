@@ -1,33 +1,59 @@
 package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.config.ClosedLoopConfig;
 
 public class ElevatorSubsystem extends SubsystemBase{
-    private SparkMax motor1 = new SparkMax(19,MotorType.kBrushless);
+    private SparkClosedLoopController m_ClosedLoopController;
+    private ClosedLoopConfig m_ClosedLoopConfig;
+    private double speed, kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, Pos;
+    private SparkMax motor = new SparkMax(19,MotorType.kBrushless);
+    private RelativeEncoder c_up = motor.getEncoder();
     
-    private RelativeEncoder c_up = motor1.getEncoder();
-    
-public void run(double speed){
-motor1.set(speed);
-
-}
-public void setzero() { 
-        
-        c_up.setPosition(0);
+    public ElevatorSubsystem() {
+        m_ClosedLoopConfig = new ClosedLoopConfig();
+    } 
+    public void run(double speed){
+        motor.set(speed);
     }
-    public void getPos() {
-      SmartDashboard.putNumber("Elevator Degrees", c_up.getPosition());
+    public void ElevatorGetPos() {
+        SmartDashboard.putNumber("Elevator Position", c_up.getPosition());
+    }
 
-      
+    public void Initialize() {
+        c_up.setPosition(0);// set elevator to zero at power on
+    }
+
+    public void ElevatorToPos(double pos) {
+        m_ClosedLoopController = motor.getClosedLoopController();
+        this.Pos = pos;
     
-}
-public void run1(double speed) {
-    motor1.set(speed);
-}
+        // PID coefficients
+        kP = 0.1; 
+        kI = 1e-4;
+        kD = 1; 
+        kIz = 0; 
+        kFF = 0; 
+        kMaxOutput = 1; 
+        kMinOutput = -1;
+    
+        // set PID coefficients & target
+        //set target & control type & slot
+        m_ClosedLoopController.setReference(pos,ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        m_ClosedLoopConfig.pidf(kP,kI,kD,kFF,ClosedLoopSlot.kSlot0);
+        m_ClosedLoopController.//setOutputRange(kMinOutput, kMaxOutput);
+        
+        
+    }
 
 }
 
