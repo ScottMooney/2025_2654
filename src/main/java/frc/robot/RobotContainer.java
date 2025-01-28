@@ -68,12 +68,12 @@ public class RobotContainer {
   private final LifterSubsystem m_LifterSubsystem = new LifterSubsystem();
   final CommandXboxController driverXbox = new CommandXboxController(0);
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve/neo"));
+  // private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  //                                                                        "swerve/neo"));
 //Set Default Commands
   public RobotContainer() {
     configureBindings();
-    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+  //  drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
 //Shooter Default Commands
     m_ShooterIntakeSubsystem.setDefaultCommand(new ShooterIntakeCommand(m_ShooterIntakeSubsystem,0));
     m_ShooterSubsystem.setDefaultCommand(new ShooterCommand(m_ShooterSubsystem,0));
@@ -82,30 +82,30 @@ public class RobotContainer {
    // m_ElevatorArmSubsystem2.setDefaultCommand(new ElevatorArmCommand2(m_ElevatorArmSubsystem2,0));
     m_ElevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_ElevatorSubsystem,0));
     m_ElevatorWheelsSubsystem.setDefaultCommand(new ElevatorWheelsCommand(m_ElevatorWheelsSubsystem,0));
-    m_ElevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_ElevatorArmSubsystem,0));
+  //  m_ElevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_ElevatorArmSubsystem,0));
 //Lifter Defaults
-    m_LifterSubsystem.setDefaultCommand(new LifterCommand(m_LifterSubsystem, 0));
-    Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
-      () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-      () -> driverXbox.getRawAxis(2));
+  //   m_LifterSubsystem.setDefaultCommand(new LifterCommand(m_LifterSubsystem, 0));
+  //   Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
+  //     () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+  //     () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+  //     () -> driverXbox.getRawAxis(2));
 
-  drivebase.setDefaultCommand(driveFieldOrientedDirectAngleSim);
+  // drivebase.setDefaultCommand(driveFieldOrientedDirectAngleSim);
   }
 
-  SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-  ()-> m_XboxController.getLeftY() * -1,
-  ()-> m_XboxController.getLeftX() * -1)
-    .withControllerRotationAxis(()-> m_XboxController.getRightX() * -1)
-    .deadband(OperatorConstants.DEADBAND)
-    .scaleTranslation(0.8)
-    .allianceRelativeControl(true);
+  // SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
+  // ()-> m_XboxController.getLeftY() * -1,
+  // ()-> m_XboxController.getLeftX() * -1)
+  //   .withControllerRotationAxis(()-> m_XboxController.getRightX() * -1)
+  //   .deadband(OperatorConstants.DEADBAND)
+  //   .scaleTranslation(0.8)
+  //   .allianceRelativeControl(true);
 
-  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(()-> m_XboxController.getRightX() * -1,
-  ()-> m_XboxController.getRightY() * -1) 
-    .headingWhile(true);
-  Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
-  Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+  // SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(()-> m_XboxController.getRightX() * -1,
+  // ()-> m_XboxController.getRightY() * -1) 
+  //   .headingWhile(true);
+  // Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
+  // Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
 
   private void configureBindings() {
 
@@ -121,27 +121,28 @@ public class RobotContainer {
     m_driverController.button(4).whileTrue(new ShooterCommand(m_ShooterSubsystem, -0.8));
     m_driverController.button(5).whileTrue(new ElevatorCommand(m_ElevatorSubsystem, 0.1));//moves elevator up
     m_driverController.button(9).whileTrue(new ElevatorCommand(m_ElevatorSubsystem, -0.1));//moves elevator down
-    m_driverController.button(6).whileTrue(new ElevatorArmCommand(m_ElevatorArmSubsystem, 0));
+    m_driverController.button(6).whileTrue(new ElevatorArmCommand(m_ElevatorArmSubsystem, 0.1));
+    m_driverController.button(8).whileTrue(new ElevatorArmCommand(m_ElevatorArmSubsystem, 0.10));
     m_driverController.button(7).whileTrue(new ElevatorWheelsCommand(m_ElevatorWheelsSubsystem, 0));
   // Call Sam to make button for Auto Limelight Targeting. Has to be on Driver Controller
   // Only Shooter up and down, And Limelight auto target to be on the Driver Controller
-  driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+  //driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 }
-public Command getAutonomousCommand()
-  {
-    // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
-  }
+// public Command getAutonomousCommand()
+//   {
+//     // An example command will be run in autonomous
+//     return drivebase.getAutonomousCommand("New Auto");
+//   }
 
-  public void setDriveMode()
-  {
-    //drivebase.setDefaultCommand();
-  }
+//   public void setDriveMode()
+//   {
+//     //drivebase.setDefaultCommand();
+//   }
 
-  public void setMotorBrake(boolean brake)
-  {
-    drivebase.setMotorBrake(brake);
-  }
+//   public void setMotorBrake(boolean brake)
+//   {
+//     drivebase.setMotorBrake(brake);
+//   }
 
 
 

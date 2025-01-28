@@ -14,8 +14,12 @@ public class ElevatorArmSubsystem extends SubsystemBase{
     private SparkMaxConfig config = new SparkMaxConfig();
     private RelativeEncoder m_Rotation = motor1.getEncoder();
 
-public void run(double speed){
-    motor1.set(speed);
+public void run(double speed){//runs motor if in range
+    double pos;
+    pos = m_Rotation.getPosition();
+    if(pos > 0 || pos < 50) {
+        motor1.set(speed);
+    }
     
     }
     public void drive_to_pos(double desired_pos,double speed){  //desired pos should be 1.833 times the desired angle

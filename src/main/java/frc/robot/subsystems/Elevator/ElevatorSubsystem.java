@@ -50,7 +50,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         //set target & control type & slot
         m_ClosedLoopController.setReference(pos,ControlType.kPosition, ClosedLoopSlot.kSlot0);
         m_ClosedLoopConfig.pidf(kP,kI,kD,kFF,ClosedLoopSlot.kSlot0);
-        m_ClosedLoopController.//setOutputRange(kMinOutput, kMaxOutput);
+     //   m_ClosedLoopController.//setOutputRange(kMinOutput, kMaxOutput);
         
         
     }
