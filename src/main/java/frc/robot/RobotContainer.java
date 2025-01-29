@@ -40,7 +40,7 @@ import frc.robot.subsystems.LifterSubsystem;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  // private final SwerveSubsystem drivebase = new SwerveSubsystem();
+  private final SwerveSubsystem drivebase = new SwerveSubsystem();
   private final CommandXboxController m_XboxController =
 //Drive controller
   new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -56,12 +56,10 @@ public class RobotContainer {
   private final ShooterRotation m_ShooterRotation = new ShooterRotation();
   private final ShooterIntakeSubsystem m_ShooterIntakeSubsystem = new ShooterIntakeSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  //private final ShooterRotation m_ShooterRotation2 = new ShooterRotation();
 // Elevator Subsystems defined here
   private final ElevatorArmSubsystem m_ElevatorArmSubsystem = new ElevatorArmSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final ElevatorWheelsSubsystem m_ElevatorWheelsSubsystem = new ElevatorWheelsSubsystem();
-  //private final ElevatorArmSubsystem m_ElevatorArmSubsystem2 = new ElevatorArmSubsystem();
 //Park
   //private final ParkSub m_ParkSub = new ParkSub();
 //Lifter
@@ -93,19 +91,19 @@ public class RobotContainer {
   // drivebase.setDefaultCommand(driveFieldOrientedDirectAngleSim);
   }
 
-  // SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-  // ()-> m_XboxController.getLeftY() * -1,
-  // ()-> m_XboxController.getLeftX() * -1)
-  //   .withControllerRotationAxis(()-> m_XboxController.getRightX() * -1)
-  //   .deadband(OperatorConstants.DEADBAND)
-  //   .scaleTranslation(0.8)
-  //   .allianceRelativeControl(true);
+  SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
+  ()-> m_XboxController.getLeftY() * -1,
+  ()-> m_XboxController.getLeftX() * -1)
+    .withControllerRotationAxis(()-> m_XboxController.getRightX() * -1)
+    .deadband(OperatorConstants.DEADBAND)
+    .scaleTranslation(0.8)
+    .allianceRelativeControl(true);
 
-  // SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(()-> m_XboxController.getRightX() * -1,
-  // ()-> m_XboxController.getRightY() * -1) 
-  //   .headingWhile(true);
-  // Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
-  // Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().withControllerHeadingAxis(()-> m_XboxController.getRightX() * -1,
+  ()-> m_XboxController.getRightY() * -1) 
+    .headingWhile(true);
+  Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
+  Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
 
   private void configureBindings() {
 

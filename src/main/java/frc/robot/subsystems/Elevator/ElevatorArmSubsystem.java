@@ -13,14 +13,16 @@ public class ElevatorArmSubsystem extends SubsystemBase{
     private SparkMax motor1 = new SparkMax(21,MotorType.kBrushless);
     private SparkMaxConfig config = new SparkMaxConfig();
     private RelativeEncoder m_Rotation = motor1.getEncoder();
-
-public void run(double speed){//runs motor if in range
-    double pos;
-    pos = m_Rotation.getPosition();
-    if(pos > 0 || pos < 50) {
-        motor1.set(speed);
-    }
+    private double pos;
     
+    public void run(double speed1) {//runs motor if in range
+        pos = m_Rotation.getPosition();
+        if(pos > 0 && speed1 > 0) {// motor spins CCW
+            motor1.set(speed1);
+        }
+        if(pos < 50 && speed1 < 0) { //motor spins CW
+            motor1.set(speed1);
+        }
     }
     public void drive_to_pos(double desired_pos,double speed){  //desired pos should be 1.833 times the desired angle
         desired_pos = desired_pos /1.4976;//1.92
